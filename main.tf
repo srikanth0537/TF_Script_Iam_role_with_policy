@@ -1,5 +1,5 @@
 resource "aws_iam_role" "githubrole" {
-  name = "rolefromgithubaction"
+  name = "rolefromgithubactions"
 
   # assume_role_policy is omitted for brevity in this example. Refer to the
   # documentation for aws_iam_role for a complete example.
