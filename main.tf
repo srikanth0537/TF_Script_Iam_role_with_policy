@@ -35,6 +35,7 @@ resource "aws_iam_role_policy" "githubpolicy" {
       # access the S3 API.
       "Action" = "s3:*",
       "Effect" = "Allow",
+      "Resource" = "*"
     }],
   })
 }
