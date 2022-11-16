@@ -3,8 +3,22 @@ resource "aws_iam_role" "githubrole" {
 
   # assume_role_policy is omitted for brevity in this example. Refer to the
   # documentation for aws_iam_role for a complete example.
-  assume_role_policy = "githubpolicy"  
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
 }
+EOF
+}  
 
 resource "aws_iam_instance_profile" "example" {
   # Because this expression refers to the role, Terraform can infer
