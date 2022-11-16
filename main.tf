@@ -3,7 +3,7 @@ resource "aws_iam_role" "githubrole" {
 
   # assume_role_policy is omitted for brevity in this example. Refer to the
   # documentation for aws_iam_role for a complete example.
-  assume_role_policy = "aws_iam_role_policy.githubpolicy.policy"  
+  assume_role_policy = "githubpolicy"  
 }
 
 resource "aws_iam_instance_profile" "example" {
