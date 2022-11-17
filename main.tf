@@ -46,7 +46,7 @@ resource "aws_iam_policy_attachment" "test-attach" {
 # To attach the IAM role to the ec2 instance.
 resource "aws_iam_instance_profile" "test_profile" {
   name  = "test_profile"
-  roles = ["${aws_iam_role.ec2_s3_access_role.name}"]
+  role = ["${aws_iam_role.ec2_s3_access_role.name}"]
 }
 
 
