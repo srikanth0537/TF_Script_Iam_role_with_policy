@@ -1,8 +1,6 @@
-resource "aws_iam_role" "githubrole" {
-  name = "rolefromgithubactions"
-
-  # assume_role_policy is omitted for brevity in this example. Refer to the
-  # documentation for aws_iam_role for a complete example.
+# Creating IAM role with attaching IAM policy to an ec2 instance and access the s3 service from instance.
+resource "aws_iam_role" "ec2_s3_access_role" {
+  name               = "s3-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -10,7 +8,7 @@ resource "aws_iam_role" "githubrole" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "Service": "s3.amazonaws.com"
+        "Service": "ec2.amazonaws.com"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -20,39 +18,46 @@ resource "aws_iam_role" "githubrole" {
 EOF
 }  
 
-resource "aws_iam_instance_profile" "example" {
-  # Because this expression refers to the role, Terraform can infer
-  # automatically that the role must be created first.
-  role = aws_iam_role.githubrole.name
+resource "aws_iam_policy" "policy" {
+  name        = "test-policy"
+  description = "A test policy"
+  policy      = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "*"
+        }
+    ]
+}
+EOF  
 }
 
-resource "aws_iam_role_policy" "githubpolicy" {
-  name   = "policyfromgithub"
-  role   = aws_iam_role.githubrole.name
-  policy = jsonencode({
-    "Statement" = [{
-      # This policy allows software running on the EC2 instance to
-      # access the S3 API.
-      "Action" = "s3:*",
-      "Effect" = "Allow",
-      "Resource" = "*"
-    }],
-  })
+# IAM policy to attach with above IAM role.
+resource "aws_iam_policy_attachment" "test-attach" {
+  name       = "test-attachment"
+  roles      = ["${aws_iam_role.ec2_s3_access_role.name}"]
+  policy_arn = "${aws_iam_policy.policy.arn}"
 }
 
-resource "aws_instance" "ec2fromgithubrole" {
-  ami           = "ami-0e6329e222e662a52"
-  instance_type = "t2.micro"
 
-  # Terraform can infer from this that the instance profile must
-  # be created before the EC2 instance.
-  iam_instance_profile = aws_iam_instance_profile.example.role
-
-  # However, if software running in this EC2 instance needs access
-  # to the S3 API in order to boot properly, there is also a "hidden"
-  # dependency on the aws_iam_role_policy that Terraform cannot
-  # automatically infer, so it must be declared explicitly:
-  depends_on = [
-    aws_iam_role_policy.githubpolicy
-  ]
+# To attach the IAM role to the ec2 instance.
+resource "aws_iam_instance_profile" "test_profile" {
+  name  = "test_profile"
+  roles = ["${aws_iam_role.ec2_s3_access_role.name}"]
 }
+
+
+# ec2 instance resource block:
+resource "aws_instance" "my-test-instance" {
+  ami             = "${lookup(var.AmiLinux, var.region)}"
+  instance_type   = "t2.micro"
+  iam_instance_profile = "${aws_iam_instance_profile.test_profile.name}"
+
+  tags {
+    Name = "test-instance"
+  }
+}
+
