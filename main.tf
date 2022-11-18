@@ -49,7 +49,7 @@ resource "aws_iam_instance_profile" "test_profile" {
   name  = "test_profile1"
   role = "${aws_iam_role.ec2_s3_access_role.name}"
 }
-
+*/
 
 # ec2 instance resource block:
 resource "aws_instance" "my-test-instance" {
@@ -60,5 +60,5 @@ resource "aws_instance" "my-test-instance" {
     Name = "ec2-from-github-actions"
   }
 }
-*/
+
 
