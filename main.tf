@@ -1,6 +1,6 @@
 # Creating IAM role with attaching IAM policy to an ec2 instance and access the s3 service from instance.
 resource "aws_iam_role" "ec2_s3_access_role" {
-  name               = "s3-role"
+  name               = "s3-role1"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -19,7 +19,7 @@ EOF
 }  
 
 resource "aws_iam_policy" "policy" {
-  name        = "test-policy"
+  name        = "test-policy1"
   description = "A test policy"
   policy      = <<EOF
 {
@@ -45,7 +45,7 @@ resource "aws_iam_policy_attachment" "test-attach" {
 
 # To attach the IAM role to the ec2 instance.
 resource "aws_iam_instance_profile" "test_profile" {
-  name  = "test_profile"
+  name  = "test_profile1"
   role = "${aws_iam_role.ec2_s3_access_role.name}"
 }
 
@@ -55,7 +55,8 @@ resource "aws_instance" "my-test-instance" {
   ami             = "ami-0e6329e222e662a52"
   instance_type   = "t2.micro"
   iam_instance_profile = "${aws_iam_instance_profile.test_profile.name}"
-
-  depends_on = [ aws_iam_policy.policy ]
+  tags = { 
+    Name = "ec2-from-github-actions"
+  }
 }
 
