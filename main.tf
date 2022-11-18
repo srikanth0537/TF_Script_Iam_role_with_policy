@@ -21,7 +21,7 @@ EOF
 
 # Creating IAM policy to access s3 service 
 resource "aws_iam_policy" "policy" {
-  name        = "test-policy"
+  name        = "test-policy1"
   description = "A test policy"
   policy      = <<EOF
 {
