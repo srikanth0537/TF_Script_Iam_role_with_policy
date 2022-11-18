@@ -1,7 +1,7 @@
 # Creating IAM role by assume policy of accessing ec2 instance.
 
 resource "aws_iam_role" "ec2_s3_access_role" {
-  name               = "s3-role"
+  name               = "s3-role2"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -21,7 +21,7 @@ EOF
 
 # Creating IAM policy to access s3 service 
 resource "aws_iam_policy" "policy" {
-  name        = "test-policy1"
+  name        = "test-policy2"
   description = "A test policy"
   policy      = <<EOF
 {
