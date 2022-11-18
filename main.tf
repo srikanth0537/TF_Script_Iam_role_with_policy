@@ -1,4 +1,5 @@
 # Creating IAM role with attaching IAM policy to an ec2 instance and access the s3 service from instance.
+/*
 resource "aws_iam_role" "ec2_s3_access_role" {
   name               = "s3-role1"
   assume_role_policy = <<EOF
@@ -59,4 +60,5 @@ resource "aws_instance" "my-test-instance" {
     Name = "ec2-from-github-actions"
   }
 }
+*/
 
