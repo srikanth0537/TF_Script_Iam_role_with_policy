@@ -36,6 +36,7 @@ resource "aws_iam_policy" "policy" {
 EOF  
 }
 
+*/
 # IAM policy to attach with above IAM role.
 resource "aws_iam_policy_attachment" "test-attach" {
   name       = "test-attachment"
@@ -43,7 +44,7 @@ resource "aws_iam_policy_attachment" "test-attach" {
   policy_arn = "${aws_iam_policy.policy.arn}"
 }
 
-
+/*
 # To attach the IAM role to the ec2 instance.
 resource "aws_iam_instance_profile" "test_profile" {
   name  = "test_profile1"
