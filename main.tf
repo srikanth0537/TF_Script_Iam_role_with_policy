@@ -56,9 +56,6 @@ resource "aws_instance" "my-test-instance" {
   instance_type   = "t2.micro"
   iam_instance_profile = "${aws_iam_instance_profile.test_profile.name}"
 
-  tags {
-    Name = "test-instance"
-  }
-  depends_on = [ aws_iam_policy.policy.name ]
+  depends_on = [ aws_iam_policy.policy ]
 }
 
