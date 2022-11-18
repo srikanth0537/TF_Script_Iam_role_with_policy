@@ -46,18 +46,19 @@ resource "aws_iam_policy_attachment" "test-attach" {
 # To attach the IAM role to the ec2 instance.
 resource "aws_iam_instance_profile" "test_profile" {
   name  = "test_profile"
-  role = ["${aws_iam_role.ec2_s3_access_role.name}"]
+  role = "${aws_iam_role.ec2_s3_access_role.name}"
 }
 
 
 # ec2 instance resource block:
 resource "aws_instance" "my-test-instance" {
-  ami             = "${lookup(var.AmiLinux, var.region)}"
+  ami             = "ami-0e6329e222e662a52"
   instance_type   = "t2.micro"
   iam_instance_profile = "${aws_iam_instance_profile.test_profile.name}"
 
   tags {
     Name = "test-instance"
   }
+  depends_on = [ aws_iam_policy.policy.name ]
 }
 
